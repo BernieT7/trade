@@ -20,18 +20,18 @@
 
 回測：
     
-    選取過去五年DJI成分股的股價資訊作為回測資料，比較此投資策略是否勝過DJI，我會以Compound Annual Growth Rate, Sharpe ratio, 
-    Calmar ratio比較兩者的差異 
+    選取過去五年DJI成分股的股價資訊作為回測資料，比較此投資策略是否勝過DJI，我會以Compound Annual Growth Rate(CAGR), Sharpe ratio(SR), 
+    Calmar ratio(CR)比較兩者的差異 
     
     回測結果：
         
-        1. Compound Annual Growth Rate:            
+        | 标题1 | strategy | DJI |
+        |-------|-------|-------|
+        | CAGR | 10.94% | 8.69% |
+        | SR | 0.3627 | 0.2735 |
+        | CR | 0.3909 | 0.3747 |
         
-        2. Sharpe ratio:
-        
-        3. Calmar ratio:
-        
-### 1. Renko & MACD
+### 2. Renko & MACD
 策略說明：
     
     1. Renko chart：
