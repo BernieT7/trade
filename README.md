@@ -45,15 +45,17 @@
     2. MACD :
 
         在了解MACD之前必須先了解exponential moving average, EMA，EMA為指數加權平均，越靠近當前的數據全中相對高，而越遠離當前的數據權重相
-對低，EMA<sub>t</sub> = a*P<sub>t</sub> + (1-a)EMA<sub>t-1</sub>, a=2/(1+N), N為窗口大小。
+        對低，EMA[t] = a*P[t] + (1-a)EMA[t-1], a=2/(1+N), N為窗口大小。
         MACD = EMA12 - EMA26
         Signal line = EMA9(MACD)，也就是MACD線的EMA, while N=9
     
-    3. 設定投資組合最高持有6張不同股票
+    3. 買入信號：連續兩個以上的上升renko bar加上MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
+       出場時機：MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
     
-    4. 每個月計算DJI所有成分股月收益率
+    4. 賣出信號：連續兩個以上的下降renko bar加上MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
+       出場時機：MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
     
-    5. 每個月調整投資組合，將投資組合中表現最差的3檔股票剃除，並加入其餘表現最好的3檔股票
+    5. 交易標的：交易量高的外匯EURUSD, GBPUSD, USDCHF, AUDUSD, USDCAD
 
 回測：
     
