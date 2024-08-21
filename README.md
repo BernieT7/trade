@@ -1,4 +1,4 @@
-# __Trading Strategy__
+# __Trading with Python__
 ## Strategies
 1. Portfolios rebalancing
 2. Renko & MACD
@@ -30,8 +30,8 @@
 |CAGR|10.94%|8.69%|
 |SR|0.3627|0.2735|
 |CR|0.3909|0.3747|
-
-
+#### 結論
+    Monthly portfolios rebalancing的策略在2019/8/20~2019/8/20的整體表現勝過道瓊工業平均指數
 
 ### 2. Renko & MACD
 策略說明：
