@@ -8,6 +8,7 @@ Created on Wed Jul 31 01:13:58 2024
 import numpy as np
 import pandas as pd
 import yfinance as yf
+import matplotlib.pyplot as plt
 
 def get_CAGR(DF):
     df = DF.copy()  # 複製數據
@@ -43,6 +44,11 @@ def get_MDD(DF):
     MDD = (df["drawdown"]/df["max cum return"]).max()  # 計算最大回撤
     return MDD
 
+def get_calmar(DF):
+    df = DF.copy()
+    cal = get_CAGR(df) / get_MDD(df)  # 卡馬比率 = CAGR / 最大回撤
+    return cal
+
 def get_risk_free_rate():
     # 使用 'TNX' 獲取 10 年期美國國債收益率 (數據來自雅虎財經)
     ticker = "^TNX"
@@ -52,28 +58,52 @@ def get_risk_free_rate():
     risk_free_rate = data['Close'].iloc[-1] / 100
     return risk_free_rate
 
-pairs = [
-    "EURUSD=X",  
-    "JPYUSD=X",   
-    "AUDUSD=X",  
-    "GBPUSD=X",  
-    "CADUSD=X",
-    "CNYUSD=X",
-    "CHFUSD=X",
-    "KRWUSD=X"
+stocks = [
+    "MMM",  # 3M
+    "AMGN",  # American Express
+    "AAPL", # Apple
+    "AXP",   # Boeing
+    "AMZN",  # Caterpillar
+    "BA",  # Chevron
+    "CAT", # Cisco Systems
+    "CVX",   # Coca-Cola
+    "CSCO",  # Dow Inc.
+    "KO",  # ExxonMobil
+    "GS",   # Goldman Sachs
+    "HD",   # Home Depot
+    "DOW",  # IBM
+    "INTC", # Intel
+    "JNJ",  # Johnson & Johnson
+    "JPM",  # JPMorgan Chase
+    "HON",  # McDonald's
+    "IBM",  # Merck & Co.
+    "MSFT", # Microsoft
+    "MCD",  # Nike
+    "MRK",  # Pfizer
+    "PG",   # Procter & Gamble
+    "TRV",  # Travelers Companies
+    "UNH",  # UnitedHealth Group
+    "VZ",   # Verizon
+    "V",    # Visa
+    "NKE",  # Walgreens Boots Alliance
+    "WMT",  # Walmart
+    "DIS",  # Walt Disney
+    "TRV",  # Travelers
+    "CRM",  # Salesforce.com
 ]
+
 ohlc_data = {}
 
-for ticker in pairs:
-    temp = yf.download(ticker, interval="5m")
+for ticker in stocks:
+    temp = yf.download(ticker, period="60d", interval="5m")
     temp.dropna(how="any", inplace=True)
     ohlc_data[ticker] = temp
 
-pairs = ohlc_data.keys()
+stocks = ohlc_data.keys()
 ohlc_df = ohlc_data.copy()
 signal = {}
 ret = {}
-for ticker in pairs:
+for ticker in stocks:
     ohlc_df[ticker]["rollin_max"] = ohlc_df[ticker]["High"].rolling(20).max()
     ohlc_df[ticker]["rollin_min"] = ohlc_df[ticker]["Low"].rolling(20).min()
     ohlc_df[ticker]["rolling_max_vol"] = ohlc_df[ticker]["Volume"].rolling(20).max()
@@ -85,7 +115,7 @@ for ticker in pairs:
 # buy/sell: price > max/price < min and vol > 1.5 * max_vol
 # stop loss: price < pre_close - ATR / price > pre_close + ATR 
 
-for ticker in pairs:
+for ticker in stocks:
     for i in range(len(ohlc_df[ticker])):
         if signal[ticker] == "":
             ret[ticker].append(0)
@@ -120,23 +150,20 @@ for ticker in pairs:
 
 rf = get_risk_free_rate()  # 設定無風險收益率
 strategy_ret = pd.DataFrame()
-for ticker in pairs:
+for ticker in stocks:
     strategy_ret[ticker] = ohlc_df[ticker]["ret"]
 strategy_ret["ret"] = strategy_ret.mean(axis=1)
 cagr = get_CAGR(strategy_ret)
 sharpe_ratio = get_sharpe(strategy_ret, rf)
-MDD = get_MDD(strategy_ret) 
+CR = get_calmar(strategy_ret) 
 
-(1+strategy_ret["ret"]).cumprod().plot()
+DJI = yf.download("^DJI", period="60d", interval="5m")  # 下載道瓊指數數據
+DJI["ret"] = DJI["Adj Close"].pct_change() 
 
-cagr_all = {}
-sharpe_all = {}
-MDD_all = {}
-for ticker in pairs:
-    cagr_all[ticker] = get_CAGR(ohlc_df[ticker])
-    sharpe_all[ticker] = get_sharpe(ohlc_df[ticker], rf)
-    MDD_all[ticker] = get_MDD(ohlc_df[ticker])
-    
-KPI_df = pd.DataFrame([cagr_all,sharpe_all,MDD_all],index=["Return","Sharpe Ratio","Max Drawdown"])         
-KPI_df = KPI_df.T.sort_values(by="Return")
-    
+fig, ax = plt.subplots()  # 創建圖表
+plt.plot((1+strategy_ret["ret"]).cumprod())  # 繪製投資組合的累積收益率
+plt.plot((1+DJI["ret"]).cumprod())  # 繪製道瓊指數的累積收益率
+plt.title("Index Return vs Strategy Return")  # 設置圖表標題
+plt.ylabel("cumulative return")  # 設置Y軸標籤
+plt.xlabel("time")  # 設置X軸標籤
+ax.legend(["Strategy Return","DJI Return"])

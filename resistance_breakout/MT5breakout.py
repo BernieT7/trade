@@ -97,7 +97,7 @@ def trade_signal(DF, l_s):
     return signal
 
 def main():
-#    try:
+    try:
         for currency in pairs:
             positions = get_positions()
             long_short = ""
@@ -133,9 +133,9 @@ def main():
                 print("Existing Long position closed for ", currency)
                 print("New Short position initiated for ", currency)
                 
-#    except Exception as e:
-#       print(e)
-#       print("error encountered....skipping this iteration")
+    except Exception as e:
+        print(e)
+        print("error encountered....skipping this iteration")
     
 os.chdir(r"C:\Users\user\Desktop\trade\keys")
 
@@ -147,14 +147,7 @@ path = r"C:\Program Files\MetaTrader 5\terminal64.exe"
 if mt5.initialize(path=path, login=int(key[0]), password=key[1], server=key[2]):
     print("成功連接到MT5")
     
-pairs = [
-    "EURUSD",  
-    "USDJPY",   
-    "AUDUSD",  
-    "GBPUSD",  
-    "USDRUB",
-    "USDCHF"
-]    
+pairs = ['EURUSD','GBPUSD','USDCHF','AUDUSD','USDCAD']   
 pos_size = 0.5    
     
 starttime=time.time()

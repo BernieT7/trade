@@ -23,7 +23,7 @@ def renko_DF(data_frame):
     
     # 初始化Renko圖表並設置brick_size
     df_2 = Renko(df)
-    df_2.brick_size = max(0.5, round(ATR(data_frame, 120).iloc[-1], 0))  # 設置brick_size
+    df_2.brick_size = round(ATR(data_frame, 120).iloc[-1], 4)  # 設置brick_size
     
     renko_df = df_2.get_ohlc_data()
     renko_df["bar_num"] = np.where(renko_df["uptrend"] == True, 1, np.where(renko_df["uptrend"] == False, -1, 0))
@@ -146,7 +146,7 @@ pairs = ['EURUSD','GBPUSD','USDCHF','AUDUSD','USDCAD']
 pos_size = 0.5
     
 def main():
-    try:
+#    try:
         for currency in pairs:
             positions = get_positions()
             long_short = ""
@@ -181,9 +181,9 @@ def main():
                 place_market_order(currency, abs(tol_pos)+pos_size, "sell")
                 print("Existing Long position closed for ", currency)
                 print("New Short position initiated for ", currency)
-    except Exception as e:
-       print(e)
-       print("error encountered....skipping this iteration")
+#   except Exception as e:
+#       print(e)
+#       print("error encountered....skipping this iteration")
             
 starttime=time.time()
 timeout = time.time() + 60*60*1  # 60 seconds times 60 meaning the script will run for 1 hr

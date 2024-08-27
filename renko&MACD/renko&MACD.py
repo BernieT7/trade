@@ -11,6 +11,7 @@ import yfinance as yf
 import statsmodels.api as sm
 from stocktrends import Renko
 import copy
+import matplotlib.pyplot as plt
 
 def renko_DF(data_frame):
     df = data_frame.copy()
@@ -22,7 +23,7 @@ def renko_DF(data_frame):
     
     # 初始化Renko圖表並設置brick_size
     df_2 = Renko(df)
-    df_2.brick_size = max(0.5, round(ATR(data_frame, 120).iloc[-1], 0))  # 設置brick_size
+    df_2.brick_size = round(ATR(data_frame, 120).iloc[-1], 4)  # 設置brick_size
     
     renko_df = df_2.get_ohlc_data()
     renko_df["bar_num"] = np.where(renko_df["uptrend"] == True, 1, np.where(renko_df["uptrend"] == False, -1, 0))
@@ -92,6 +93,10 @@ def get_MDD(DF):
     MDD = (df["drawdown"]/df["max cum return"]).max()  # 計算最大回撤
     return MDD
 
+def get_calmar(DF):
+    df = DF.copy()
+    cal = get_CAGR(df) / get_MDD(df)  # 卡馬比率 = CAGR / 最大回撤
+    return cal
 
 def get_risk_free_rate():
     # 使用 'TNX' 獲取 10 年期美國國債收益率 (數據來自雅虎財經)
@@ -102,21 +107,44 @@ def get_risk_free_rate():
     risk_free_rate = data['Close'].iloc[-1] / 100
     return risk_free_rate
 
-pairs = [
-    "EURUSD=X",  
-    "JPYUSD=X",   
-    "AUDUSD=X",  
-    "GBPUSD=X",  
-    "CADUSD=X",
-    "CNYUSD=X",
-    "CHFUSD=X",
-    "KRWUSD=X"
+stocks = [
+    "MMM",  # 3M
+    "AMGN",  # American Express
+    "AAPL", # Apple
+    "AXP",   # Boeing
+    "AMZN",  # Caterpillar
+    "BA",  # Chevron
+    "CAT", # Cisco Systems
+    "CVX",   # Coca-Cola
+    "CSCO",  # Dow Inc.
+    "KO",  # ExxonMobil
+    "GS",   # Goldman Sachs
+    "HD",   # Home Depot
+    "DOW",  # IBM
+    "INTC", # Intel
+    "JNJ",  # Johnson & Johnson
+    "JPM",  # JPMorgan Chase
+    "HON",  # McDonald's
+    "IBM",  # Merck & Co.
+    "MSFT", # Microsoft
+    "MCD",  # Nike
+    "MRK",  # Pfizer
+    "PG",   # Procter & Gamble
+    "TRV",  # Travelers Companies
+    "UNH",  # UnitedHealth Group
+    "VZ",   # Verizon
+    "V",    # Visa
+    "NKE",  # Walgreens Boots Alliance
+    "WMT",  # Walmart
+    "DIS",  # Walt Disney
+    "TRV",  # Travelers
+    "CRM",  # Salesforce.com
 ]
 
 ohlc_data = {}
 
-for ticker in pairs:
-    temp = yf.download(ticker, interval="5m")
+for ticker in stocks:
+    temp = yf.download(ticker, period="60d", interval="5m")
     temp.dropna(how="any", inplace=True)
     ohlc_data[ticker] = temp
 
@@ -127,7 +155,7 @@ ohlc_df = copy.deepcopy(ohlc_data)
 signal = {}
 ret = {}
 
-for ticker in pairs:
+for ticker in stocks:
     renko = renko_DF(ohlc_df[ticker])
     renko.columns = ["Datetime","open","high","low","close","uptrend","bar_num"]
     ohlc_renko[ticker] = ohlc_df[ticker].merge(renko.loc[:,["Datetime","bar_num"]],how="outer",on="Datetime")
@@ -138,7 +166,7 @@ for ticker in pairs:
     signal[ticker] = ""
     ret[ticker] = [] 
 
-for ticker in pairs:
+for ticker in stocks:
     for i in range(len(ohlc_renko[ticker])):
         if signal[ticker] == "":
             ret[ticker].append(0)
@@ -166,22 +194,22 @@ for ticker in pairs:
 
 rf = get_risk_free_rate()
 strategy_ret = pd.DataFrame()
-for ticker in pairs:
+for ticker in stocks:
     strategy_ret[ticker] = ohlc_renko[ticker]["ret"]
 strategy_ret["ret"] = strategy_ret.mean(axis=1)
+strategy_ret["Datetime"] = ohlc_renko["AXP"]["Datetime"]
+strategy_ret.set_index(["Datetime"], inplace=True)
 cagr = get_CAGR(strategy_ret)
 sharpe_ratio = get_sharpe(strategy_ret, rf)
-MDD = get_MDD(strategy_ret) 
+CR = get_calmar(strategy_ret) 
 
-(1+strategy_ret["ret"]).cumprod().plot()
+DJI = yf.download("^DJI", period="60d", interval="5m")  # 下載道瓊指數數據
+DJI["ret"] = DJI["Adj Close"].pct_change()
 
-cagr_all = {}
-sharpe_all = {}
-MDD_all = {}
-for ticker in pairs:
-    cagr_all[ticker] = get_CAGR(ohlc_renko[ticker])
-    sharpe_all[ticker] = get_sharpe(ohlc_renko[ticker], rf)
-    MDD_all[ticker] = get_MDD(ohlc_renko[ticker])
-    
-KPI_df = pd.DataFrame([cagr_all, sharpe_all, MDD_all],index=["Return", "Sharpe Ratio", "Max Drawdown"])         
-KPI_df = KPI_df.T.sort_values(by="Return")
+fig, ax = plt.subplots()  # 創建圖表
+plt.plot((1+strategy_ret["ret"]).cumprod())  # 繪製投資組合的累積收益率
+plt.plot((1+DJI["ret"]).cumprod())  # 繪製道瓊指數的累積收益率
+plt.title("Index Return vs Strategy Return")  # 設置圖表標題
+plt.ylabel("cumulative return")  # 設置Y軸標籤
+plt.xlabel("time")  # 設置X軸標籤
+ax.legend(["Strategy Return","DJI Return"])
