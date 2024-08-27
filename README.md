@@ -27,7 +27,7 @@ CAGR = (End Value / Beginning Value)<sup>1/N</sup> - 1
         (2) Sharpe ratio, SR:
         
 <p>
-Sharpe Ratio = (E(R<sub>p</sub>) - r<sub>f</sub>) / volatility
+Sharpe Ratio = (E(R<sub>p</sub>) - r<sub>f</sub>) / σ
 </p>
 
         (3) Calmar ratio, CR:
@@ -116,7 +116,7 @@ CAGR = (End Value / Beginning Value)<sup>1/N</sup> - 1
         (2) Sharpe ratio, SR:
         
 <p>
-Sharpe Ratio = (E(R<sub>p</sub>) - r<sub>f</sub>) / volatility
+Sharpe Ratio = (E(R<sub>p</sub>) - r<sub>f</sub>) / σ
 </p>
 
         (3) Calmar ratio, CR:
