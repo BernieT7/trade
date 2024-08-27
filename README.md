@@ -1,14 +1,19 @@
-# __Trading with Python__
-## 研究目的
-1.程式交易能避免人手動交易的不理性，只要符合判斷條件(進場、出場)就會執行
+# __Outperformce DJI, Trading with Python__
+## 研究動機
+1.追蹤並擊敗道瓊工業平均指數, DJI。
 
-2.無須盯盤
+2.使用程式交易能避免人手動交易的不理性，只要符合判斷條件(進場、出場)就會執行
 
-3.計算快速，相較於手動交易有效率許多
+3.無須盯盤
+
+4.計算快速，相較於手動交易有效率許多
+
+5.能處理大量複雜資訊
+
 ## 交易策略說明
 ### 1. Portfolios rebalancing
 #### Target:
-    擊敗道瓊工業平均指數的長期交易策略, DJI。
+    我期望長期下能擊敗DJI
 #### Tool:
     
     1.衡量表現的指標:
@@ -19,9 +24,10 @@
             (E(Rp)-rf)/volatility
         (3) Calmar ratio, CR:
             CAGR/max drawdown
+            
 #### Data:
         
-        使用道瓊工業平均指數DJI過去五年(2019/8/20~2019/8/20)的股價資訊
+        使用道瓊工業平均指數DJI過去五年(2019/8/20~2019/8/20)每個月的股價資訊
         
 #### 策略說明：
     
@@ -91,15 +97,21 @@
     2.衡量表現的指標:
        
         (1) Compound Annual Growth Rate, CAGR:
-            (end value/beginning value)^(1/N)-1
+<p>
+CAGR = (End Value / Beginning Value)<sup>1/N</sup> - 1
+</p>
         (2) Sharpe ratio, SR:
-            (E(Rp)-rf)/volatility
+<p>
+\(\text{Sharpe Ratio} = \frac{E(R_p) - r_f}{\sigma}\)
+</p>
         (3) Calmar ratio, CR:
-            CAGR/max drawdown
+<p>
+CR = \(\frac{\text{CAGR}}{\text{max drawdown}}\)
+</p>
             
 #### Data:
     
-    以美股交易量較大的5支股票作為主要交易標的: Apple, Google, Microsoft, Amazon, Tesla
+    使用道瓊工業平均指數DJI過去兩個月(2024/6/20~2024/8/20)每五分鐘的股價資訊
     
 #### 策略說明：
 
@@ -134,9 +146,7 @@
 
 回測：
     
-    選取過去五年DJI成分股的股價資訊作為回測資料，比較此投資策略是否勝過DJI
-    
-    回測結果：
+    回測結果如下表：
         
         1. Compound Annual Growth Rate:            
         
