@@ -13,7 +13,7 @@
 ## 交易策略說明
 ### 1. Portfolios rebalancing
 #### Target:
-    我期望長期下能擊敗DJI
+    期望長期下能擊敗DJI
 #### Tool:
     
     1.衡量表現的指標:
@@ -38,7 +38,7 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
             
 #### Data:
         
-        使用道瓊工業平均指數DJI過去五年(2019/8/20~2019/8/20)每個月的股價資訊
+        使用道瓊工業平均指數成分股過去五年(2019/8/20~2019/8/20)每個月的股價資訊
         
 #### 策略說明：
     
@@ -64,6 +64,8 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
     Monthly portfolios rebalancing的策略在2019/8/20~2024/8/20的整體表現勝過道瓊工業平均指數
 
 ### 2. 技術分析
+#### Target:
+    期望短期下能擊敗DJI
 #### Tools
     1.技術指標：
     
@@ -127,7 +129,7 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
             
 #### Data:
     
-    使用道瓊工業平均指數DJI過去兩個月(2024/6/20~2024/8/20)每五分鐘的股價資訊
+    使用道瓊工業平均指數DJI成分股過去兩個月(2024/6/20~2024/8/20)每五分鐘的股價資訊
     
 #### 策略說明：
 
