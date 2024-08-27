@@ -105,7 +105,7 @@ CAGR = (End Value / Beginning Value)<sup>1/N</sup> - 1
         (2) Sharpe ratio, SR:
         
 <p>
-\(\text{Sharpe Ratio} = \frac{E(R_p) - r_f}{\sigma}\)
+CR = <span>CAGR</span> / <span>max drawdown</span>
 </p>
 
         (3) Calmar ratio, CR:
