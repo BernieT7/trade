@@ -11,13 +11,14 @@
     擊敗道瓊工業平均指數的長期交易策略, DJI。
 #### Tool:
     
-    衡量表現的指標:
+    1.衡量表現的指標:
        
-        1. Compound Annual Growth Rate, CAGR:
-        
-        2. Sharpe ratio, SR:
-        
-        3. Calmar ratio, CR:
+        (1) Compound Annual Growth Rate, CAGR:
+            (end value/beginning value)^(1/N)-1
+        (2) Sharpe ratio, SR:
+            (E(Rp)-rf)/volatility
+        (3) Calmar ratio, CR:
+            CAGR/max drawdown
 #### Data:
         
         使用道瓊工業平均指數DJI過去五年(2019/8/20~2019/8/20)的股價資訊
@@ -48,6 +49,7 @@
 ### 2. 技術分析
 #### Tools
     1.技術指標：
+    
     (1) Renko chart：
 
         Renko chart, 磚形圖，與平常的K線圖不同的是會以固定大小磚塊替代candles，磚的大小由自己設定，當價格突破了一個磚的大小才會形成新的磚，
@@ -77,8 +79,24 @@
             
         OBV 線上升時，表明買盤力量強，市場可能處於上升趨勢。
         OBV 線下降時，表明賣盤力量強，市場可能處於下降趨勢。
-        
         我打算利用OBV的以上性質建構交易的條件判斷
+
+    (4) Average True Range, ATR:
+    
+        用於判斷市場的波動性和潛在的價格變動範圍。
+        
+        TR = max(High-low, |High-pre_close|, |Low-pre_close|)
+        ATR = EMA14(TR)
+        
+    2.衡量表現的指標:
+       
+        (1) Compound Annual Growth Rate, CAGR:
+            (end value/beginning value)^(1/N)-1
+        (2) Sharpe ratio, SR:
+            (E(Rp)-rf)/volatility
+        (3) Calmar ratio, CR:
+            CAGR/max drawdown
+            
 #### Data:
     
     以美股交易量較大的5支股票作為主要交易標的: Apple, Google, Microsoft, Amazon, Tesla
@@ -86,24 +104,33 @@
 #### 策略說明：
 
     我將使用不一樣的技術指標搭配，購艦出三項交易策略並且比較三者的表現:
-    1. Renko chart：
+    1. Renko chart & MACD：
 
-        Renko chart, 磚形圖，與平常的K線圖不同的是會以固定大小磚塊替代candles，磚的大小由自己設定，當價格突破了一個磚的大小才會形成新的磚，
-        新的磚只會再原磚的45度角處生成；由於需要價格突破了一個磚的大小才會形成磚，而每次價格的突破所需時間皆不同，因此每塊磚之間的時間長度也
-        不固定。磚形圖的優勢在於排除了其他因素，只專注於價格因子。
+        買入信號：連續兩個以上的上升renko bar加上MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
+        出場時機：MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
     
-    2. MACD :
+        賣出信號：連續兩個以上的下降renko bar加上MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
+        出場時機：MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
+    
+    2. Renko chart & OBV :
 
-        在了解MACD之前必須先了解exponential moving average, EMA，EMA為指數加權平均，越靠近當前的數據全中相對高，而越遠離當前的數據權重相
-        對低，EMA[t] = a*P[t] + (1-a)EMA[t-1], a=2/(1+N), N為窗口大小。
-        MACD = EMA12 - EMA26
-        Signal line = EMA9(MACD)，也就是MACD線的EMA, while N=9
+        買入信號：連續兩個以上的上升renko bar加上OBV斜率 > 30
+        出場時機：連續兩個下降renko bar
     
-    3. 買入信號：連續兩個以上的上升renko bar加上MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
-       出場時機：MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
+        賣出信號：連續兩個以上的下降renko bar加上OBV斜率 < -30
+        出場時機：連續兩個下降renko bar
+
+    3. Resistance Breakout Strategy
+
+        構建price resisteance line: 取前20天股價最大值作為當天的上阻力位，取前20天股價最小值作為當天的下阻力位
+        構建volunm resisteance line: 取前20天交易量最大值並乘上1.5倍作為當天的上阻力位，取前20天交易量最小值並乘上1.5倍作為當天的下阻力位
+        ，volunm resisteance line是為了避免假突破的存在
+
+        買入信號：價格超過upper price resisteance line且交易量超過volunm resisteance line
+        出場時機：當天最低價 < (前一天ATR - 前一天最低價)
     
-    4. 賣出信號：連續兩個以上的下降renko bar加上MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
-       出場時機：MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
+        買入信號：價格小於lower price resisteance line且交易量超過volunm resisteance line
+        出場時機：當天最低價 > (前一天ATR + 前一天最低價)
 
 回測：
     
