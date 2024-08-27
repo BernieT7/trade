@@ -33,10 +33,7 @@
     4. 每個月調整投資組合，將投資組合中表現最差的3檔股票剃除，並加入其餘表現最好的3檔股票
 
 #### 回測：
-    
-    選取過去五年(2019/8/20~2019/8/20)DJI成分股的股價資訊作為回測資料，比較此投資策略是否勝過DJI，我會以Compound Annual Growth Rate(CAGR)
-    , Sharpe ratio(SR), Calmar ratio(CR)比較兩者的差異 
-    
+
     回測結果如下表：
         
 ||strategy|DJI|
