@@ -19,11 +19,22 @@
     1.衡量表現的指標:
        
         (1) Compound Annual Growth Rate, CAGR:
-            (end value/beginning value)^(1/N)-1
+        
+<p>
+CAGR = (End Value / Beginning Value)<sup>1/N</sup> - 1
+</p>
+
         (2) Sharpe ratio, SR:
-            (E(Rp)-rf)/volatility
+        
+<p>
+Sharpe Ratio = (E(R<sub>p</sub>) - r<sub>f</sub>) / volatility
+</p>
+
         (3) Calmar ratio, CR:
-            CAGR/max drawdown
+        
+<p>
+CR = <span>CAGR</span> / <span>max drawdown</span>
+</p>
             
 #### Data:
         
@@ -105,13 +116,13 @@ CAGR = (End Value / Beginning Value)<sup>1/N</sup> - 1
         (2) Sharpe ratio, SR:
         
 <p>
-CR = <span>CAGR</span> / <span>max drawdown</span>
+Sharpe Ratio = (E(R<sub>p</sub>) - r<sub>f</sub>) / volatility
 </p>
 
         (3) Calmar ratio, CR:
         
 <p>
-CR = \(\frac{\text{CAGR}}{\text{max drawdown}}\)
+CR = <span>CAGR</span> / <span>max drawdown</span>
 </p>
             
 #### Data:
