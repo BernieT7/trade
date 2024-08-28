@@ -61,6 +61,7 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
 |CR|0.3909|0.3747|
 
 CAGR表現比較:
+
 ![無法載入圖片](image_result/portfolios_rebalancing.png)
 
 #### 結論
