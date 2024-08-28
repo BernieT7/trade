@@ -204,7 +204,7 @@ DJI["ret"] = DJI["Adj Close"].pct_change()
 fig, ax = plt.subplots()  # 創建圖表
 plt.plot((1+strategy_ret["ret"]).cumprod())  # 繪製投資組合的累積收益率
 plt.plot((1+DJI["ret"]).cumprod())  # 繪製道瓊指數的累積收益率
-plt.title("Index Return vs Strategy Return")  # 設置圖表標題
+plt.title("Index Return vs Strategy(Renko&OBV) Return")  # 設置圖表標題
 plt.ylabel("cumulative return")  # 設置Y軸標籤
 plt.xlabel("time")  # 設置X軸標籤
 ax.legend(["Strategy Return","DJI Return"])
