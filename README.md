@@ -52,7 +52,7 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
 
 #### 回測：
 
-    回測結果如下表：
+回測結果如下表：
         
 ||strategy|DJI|
 |:---:|:---:|:---:|
@@ -60,6 +60,7 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
 |SR|0.3627|0.2735|
 |CR|0.3909|0.3747|
 
+CAGR表現比較:
 ![無法載入圖片](image_result/portfolios_rebalancing.png)
 
 #### 結論
