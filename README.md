@@ -60,6 +60,8 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
 |SR|0.3627|0.2735|
 |CR|0.3909|0.3747|
 
+![無法載入圖片][image_result/portfolios_rebalancing.pdf]
+
 #### 結論
     Monthly portfolios rebalancing的策略在2019/8/20~2024/8/20的整體表現勝過道瓊工業平均指數
 
