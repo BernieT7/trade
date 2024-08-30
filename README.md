@@ -172,7 +172,10 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
         
 ||strategy|DJI|
 |:---:|:---:|:---:|
-|CAGR|11.45%|8.96%|
-|SR|0.3852|0.2858|
-|CR|0.4089|0.3861|
+|CAGR|0.00119%|0.00465%|
+|σ|0.0249|0.1294|
+|CR|0.0014|0.0007|
 
+CAGR表現比較:
+
+![無法載入圖片](image_result/Break_resistance.png)
