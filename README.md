@@ -145,7 +145,21 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
     
    賣出信號：連續兩個以上的下降renko bar加上MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
    出場時機：MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
+   
+回測：
     
+回測結果如下表：
+        
+||strategy|DJI|
+|:---:|:---:|:---:|
+|CAGR|0.00119%|0.00465%|
+|σ|0.0249|0.1294|
+|CR|0.0014|0.0007|
+
+CAGR表現比較:
+
+![無法載入圖片](image_result/Break_resistance.png)
+
 2. Renko chart & OBV :
 
    買入信號：連續兩個以上的上升renko bar加上OBV斜率 > 30
@@ -153,6 +167,20 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
     
    賣出信號：連續兩個以上的下降renko bar加上OBV斜率 < -30
    出場時機：連續兩個下降renko bar
+
+回測：
+    
+回測結果如下表：
+        
+||strategy|DJI|
+|:---:|:---:|:---:|
+|CAGR|-0.00112%|0.00465%|
+|σ|0.0485|0.1294|
+|CR|-0.0003|0.0007|
+
+CAGR表現比較:
+
+![無法載入圖片](image_result/Renko_OBV.png)
 
 3. Resistance Breakout Strategy
 
