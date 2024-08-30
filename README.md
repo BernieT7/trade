@@ -38,7 +38,7 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
             
 #### Data:
         
-        使用道瓊工業平均指數成分股過去五年(2019/8/20~2019/8/20)每個月的股價資訊
+        使用道瓊工業平均指數成分股過去五年(2019/9/1~2024/8/1)每個月的股價資訊
         
 #### 策略說明：
     
@@ -56,16 +56,16 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
         
 ||strategy|DJI|
 |:---:|:---:|:---:|
-|CAGR|10.94%|8.69%|
-|SR|0.3627|0.2735|
-|CR|0.3909|0.3747|
+|CAGR|11.45%|8.96%|
+|SR|0.3852|0.2858|
+|CR|0.4089|0.3861|
 
 CAGR表現比較:
 
 ![無法載入圖片](image_result/portfolios_rebalancing.png)
 
 #### 結論
-    Monthly portfolios rebalancing的策略在2019/8/20~2024/8/20的整體表現勝過道瓊工業平均指數
+    Monthly portfolios rebalancing的策略在2024/6/30~2024/8/30的整體表現勝過道瓊工業平均指數
 
 ### 2. 技術分析
 #### Target:
