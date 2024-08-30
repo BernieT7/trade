@@ -137,7 +137,7 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
     
 #### 策略說明：
 
-我將使用不一樣的技術指標搭配，購艦出三項交易策略並且比較三者的表現:
+我將使用不一樣的技術指標，構建出三項交易策略並且比較三者的表現:
 1. Renko chart & MACD：
 
    買入信號：連續兩個以上的上升renko bar加上MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
@@ -152,13 +152,13 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
         
 ||strategy|DJI|
 |:---:|:---:|:---:|
-|CAGR|0.00119%|0.00465%|
-|σ|0.0249|0.1294|
-|CR|0.0014|0.0007|
+|CAGR|-0.00443%|0.00465%|
+|σ|0.0488|0.1294|
+|CR|-0.0006|0.0007|
 
 CAGR表現比較:
 
-![無法載入圖片](image_result/Break_resistance.png)
+![無法載入圖片](image_result/RenkoMACD.png)
 
 2. Renko chart & OBV :
 
@@ -180,7 +180,7 @@ CAGR表現比較:
 
 CAGR表現比較:
 
-![無法載入圖片](image_result/Renko_OBV.png)
+![無法載入圖片](image_result/RenkoOBV.png)
 
 3. Resistance Breakout Strategy
 
@@ -207,3 +207,13 @@ CAGR表現比較:
 CAGR表現比較:
 
 ![無法載入圖片](image_result/Break_resistance.png)
+
+#### 結論
+||RenkoMACD|RenkoOBV|Break Resistance|DJI|
+|:---:|:---:|:---:|:---:|:---:|
+|CAGR|-0.00443%|-0.00112%|0.00119%|0.00465%|
+|σ|0.0488|0.0485|0.0249|0.1294|
+|CR|-0.0006|-0.0003|0.0014|0.0007|
+
+使用單一技術指標的策略表現非常差，DJI的表現皆勝出，MACD以及OBV甚至是負回報，不過，三個策略的波動性都比DJI的波動性要來的小，也就是透過高一點的風險賺取較多的回報。
+### 3. 技術分析改良
