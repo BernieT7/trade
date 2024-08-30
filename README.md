@@ -150,7 +150,7 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
     
 回測結果如下表：
         
-||strategy|DJI|
+||RenkoMACD|DJI|
 |:---:|:---:|:---:|
 |CAGR|-0.00443%|0.00465%|
 |σ|0.0488|0.1294|
@@ -172,7 +172,7 @@ CAGR表現比較:
     
 回測結果如下表：
         
-||strategy|DJI|
+||RenkoOBV|DJI|
 |:---:|:---:|:---:|
 |CAGR|-0.00112%|0.00465%|
 |σ|0.0485|0.1294|
@@ -198,7 +198,7 @@ CAGR表現比較:
     
 回測結果如下表：
         
-||strategy|DJI|
+||Break Resistance|DJI|
 |:---:|:---:|:---:|
 |CAGR|0.00119%|0.00465%|
 |σ|0.0249|0.1294|
