@@ -140,11 +140,11 @@ CR = <span>CAGR</span> / <span>max drawdown</span>
 我將使用不一樣的技術指標，構建出三項交易策略並且比較三者的表現:
 1. Renko chart & MACD：
 
-   買入信號：連續兩個以上的上升renko bar加上MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
-   出場時機：MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
+買入信號：連續兩個以上的上升renko bar加上MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
+出場時機：MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
     
-   賣出信號：連續兩個以上的下降renko bar加上MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
-   出場時機：MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
+賣出信號：連續兩個以上的下降renko bar加上MACD line小於Singnal line，並且MACD line的斜率小於Singnal line斜率
+出場時機：MACD line大於Singnal line，並且MACD line的斜率大於Singnal line斜率
    
 回測：
     
@@ -162,11 +162,11 @@ CAGR表現比較:
 
 2. Renko chart & OBV :
 
-   買入信號：連續兩個以上的上升renko bar加上OBV斜率 > 30
-   出場時機：連續兩個下降renko bar
+買入信號：連續兩個以上的上升renko bar加上OBV斜率 > 30
+出場時機：連續兩個下降renko bar
     
-   賣出信號：連續兩個以上的下降renko bar加上OBV斜率 < -30
-   出場時機：連續兩個下降renko bar
+賣出信號：連續兩個以上的下降renko bar加上OBV斜率 < -30
+出場時機：連續兩個下降renko bar
 
 回測：
     
@@ -184,15 +184,15 @@ CAGR表現比較:
 
 3. Resistance Breakout Strategy
 
-   構建price resisteance line: 取前20天股價最大值作為當天的上阻力位，取前20天股價最小值作為當天的下阻力位
-   構建volunm resisteance line: 取前20天交易量最大值並乘上1.5倍作為當天的上阻力位，取前20天交易量最小值並乘上1.5倍作為當天的下阻力位
-   ，volunm resisteance line是為了避免假突破的存在
+構建price resisteance line: 取前20天股價最大值作為當天的上阻力位，取前20天股價最小值作為當天的下阻力位
+構建volunm resisteance line: 取前20天交易量最大值並乘上1.5倍作為當天的上阻力位，取前20天交易量最小值並乘上1.5倍作為當天的下阻力位
+，volunm resisteance line可以避免假突破的存在
 
-   買入信號：價格超過upper price resisteance line且交易量超過volunm resisteance line
-   出場時機：當天最低價 < (前一天ATR - 前一天最低價)
+買入信號：價格超過upper price resisteance line且交易量超過volunm resisteance line
+出場時機：當天最低價 < (前一天ATR - 前一天最低價)
     
-   買入信號：價格小於lower price resisteance line且交易量超過volunm resisteance line
-   出場時機：當天最低價 > (前一天ATR + 前一天最低價)
+買入信號：價格小於lower price resisteance line且交易量超過volunm resisteance line
+出場時機：當天最低價 > (前一天ATR + 前一天最低價)
 
 回測：
     
@@ -215,5 +215,37 @@ CAGR表現比較:
 |σ|0.0488|0.0485|0.0249|0.1294|
 |CR|-0.0006|-0.0003|0.0014|0.0007|
 
-使用單一技術指標的策略表現非常差，DJI的表現皆勝出，MACD以及OBV甚至是負回報，不過，三個策略的波動性都比DJI的波動性要來的小，也就是透過高一點的風險賺取較多的回報。
+使用單一技術指標的策略表現非常差，DJI的表現皆勝出，MACD以及OBV甚至是負回報，不過，三個策略的波動性都比DJI的波動性要來的小，也就是透過
+高一點的風險賺取較多的回報。單個技術指標的分析容易前期表現好，但一段時間後便會開始產生背離。
 ### 3. 技術分析改良
+
+#### 策略說明：
+MACD+OBV+Break Resistance:
+
+構建price resisteance line: 取前20天股價最大值作為當天的上阻力位，取前20天股價最小值作為當天的下阻力位
+構建volunm resisteance line: 取前20天交易量最大值並乘上1.5倍作為當天的上阻力位，取前20天交易量最小值並乘上1.5倍作為當天的下阻力位
+，volunm resisteance line可以避免假突破的存在
+
+買入信號：價格超過upper price resisteance line且交易量超過volunm resisteance line，除此之外，MACD line大於Singnal line且
+         OBV斜率 > 30
+出場時機：當天最低價 < (前一天ATR - 前一天最低價) 且 MACD line小於Singnal line
+    
+買入信號：價格小於lower price resisteance line且交易量超過volunm resisteance line，除此之外，MACD line小於Singnal line且
+         OBV斜率 < -30
+出場時機：當天最低價 > (前一天ATR + 前一天最低價) 且 MACD line大於Singnal line
+
+回測：
+    
+回測結果如下表：
+        
+||MACD+OBV+Break Resistance|DJI|
+|:---:|:---:|:---:|
+|CAGR|0.00518%|0.00465%|
+|σ|0.064|0.1294|
+|CR|0.0024|0.0007|
+
+CAGR表現比較:
+
+![無法載入圖片](image_result/MACD_OBV_Break_resistance.png)
+#### 結論
+考慮多向不一樣的指標
