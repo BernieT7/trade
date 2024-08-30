@@ -145,8 +145,8 @@ print(get_calmar(DJI))
 fig, ax = plt.subplots()  # 創建圖表
 plt.plot((1+portfolio_rebalancing(return_df, pos_num, x)).cumprod())  # 繪製投資組合的累積收益率
 plt.plot((1+DJI["mon_return"].reset_index(drop=True)).cumprod())  # 繪製道瓊指數的累積收益率
-plt.title("Index Return vs Strategy Return")  # 設置圖表標題
+plt.title("Index Return vs Strategy Return(Portfolios Rebalancing)")  # 設置圖表標題
 plt.ylabel("cumulative return")  # 設置Y軸標籤
 plt.xlabel("months")  # 設置X軸標籤
 ax.legend(["Strategy Return","Index Return"])  # 添加圖例
-            
+plt.savefig('portfolios_rebalancing.png')

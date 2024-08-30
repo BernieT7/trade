@@ -93,7 +93,6 @@ stocks = [
 ]
 
 ohlc_data = {}
-
 for ticker in stocks:
     temp = yf.download(ticker, period="60d", interval="5m")
     temp.dropna(how="any", inplace=True)
@@ -167,3 +166,13 @@ plt.title("Index Return vs Strategy(Resistance breakout) Return")  # 設置圖�
 plt.ylabel("cumulative return")  # 設置Y軸標籤
 plt.xlabel("time")  # 設置X軸標籤
 ax.legend(["Strategy Return","DJI Return"])
+plt.savefig('Break_resistance.png')
+
+print(cagr)
+print(sharpe_ratio)
+print(CR)
+
+print()
+print(get_CAGR(DJI))
+print(get_sharpe(DJI, rf))
+print(get_calmar(DJI))

@@ -138,7 +138,6 @@ stocks = [
     "WMT",  # Walmart
     "DIS",  # Walt Disney
     "TRV",  # Travelers
-    "CRM",  # Salesforce.com
 ]
 
 ohlc_data = {}
@@ -148,7 +147,7 @@ for ticker in stocks:
     temp.dropna(how="any", inplace=True)
     ohlc_data[ticker] = temp
 
-pairs = ohlc_data.keys()
+stocks = ohlc_data.keys()
 
 ohlc_renko = {}
 ohlc_df = copy.deepcopy(ohlc_data)
@@ -184,7 +183,7 @@ for ticker in stocks:
                 ohlc_renko[ticker]["MACD"][i] < ohlc_renko[ticker]["Signal"][i]:
                 signal[ticker] = "sell"
         elif signal[ticker] == "sell":
-            ret[ticker].append((ohlc_renko[ticker]["Adj Close"][i-1]/ohlc_renko[ticker]["Adj Close"][i])-1)
+            ret[ticker].append(1-(ohlc_renko[ticker]["Adj Close"][i]/ohlc_renko[ticker]["Adj Close"][i-1]))
             if ohlc_renko[ticker]["MACD_m"][i] > ohlc_renko[ticker]["Signal_m"][i]:
                 signal[ticker] = ""
             elif ohlc_renko[ticker]["bar_num"][i] >= 2 and \
@@ -213,3 +212,4 @@ plt.title("Index Return vs Strategy(Renko%MACD) Return")  # 設置圖表標題
 plt.ylabel("cumulative return")  # 設置Y軸標籤
 plt.xlabel("time")  # 設置X軸標籤
 ax.legend(["Strategy Return","DJI Return"])
+plt.savefig('RenkoMACD.png')

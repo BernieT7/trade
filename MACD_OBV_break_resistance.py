@@ -1,39 +1,15 @@
 # -*- coding: utf-8 -*-
 """
-Created on Thu Aug  1 15:09:12 2024
+Spyder Editor
 
-@author: user
+This is a temporary script file.
 """
 
 import numpy as np
 import pandas as pd
 import yfinance as yf
 import statsmodels.api as sm
-from stocktrends import Renko
-import copy
 import matplotlib.pyplot as plt
-
-def renko_DF(data_frame):
-    df = data_frame.copy()
-    
-    # 重設索引並更改列名稱以匹配Renko要求
-    df.drop("Close", axis=1, inplace=True)  # 刪除不必要的列
-    df.reset_index(inplace=True)
-    df.columns = ["date", "open", "high", "low", "close", "volume"]
-    
-    # 初始化Renko圖表並設置brick_size
-    df_2 = Renko(df)
-    df_2.brick_size = max(0.5, round(ATR(data_frame, 120).iloc[-1], 0))  # 設置brick_size
-    
-    renko_df = df_2.get_ohlc_data()
-    renko_df["bar_num"] = np.where(renko_df["uptrend"] == True, 1, np.where(renko_df["uptrend"] == False, -1, 0))
-    for i in range(1, len(renko_df["bar_num"])):
-        if renko_df["bar_num"][i] > 0 and renko_df["bar_num"][i-1] > 0:
-            renko_df["bar_num"][i] += renko_df["bar_num"][i-1]
-        elif renko_df["bar_num"][i] < 0 and renko_df["bar_num"][i-1] < 0:
-            renko_df["bar_num"][i] += renko_df["bar_num"][i-1]
-    renko_df.drop_duplicates(subset="date",keep="last",inplace=True)
-    return renko_df
 
 def get_slope(seri, n):
     slopes = [i*0 for i in range(n-1)]
@@ -58,6 +34,24 @@ def get_OBV(DF):
     df['obv'] = df['vol_adj'].cumsum()
     return df['obv']
 
+def MACD(data_frame, slow_window=26, fast_window=12, signal_window=9):
+    df = data_frame.copy()
+    df["slow_ema"] = df["Adj Close"].ewm(span=slow_window, min_periods=slow_window).mean()
+    df["fast_ema"] = df["Adj Close"].ewm(span=fast_window, min_periods=fast_window).mean()
+    df["macd"] = df["fast_ema"] - df["slow_ema"]
+    df["signal"] = df["macd"].ewm(span=signal_window, min_periods=signal_window).mean()
+    df.dropna(inplace=True)
+    return df.loc[:, ["macd", "signal"]]
+
+def ATR(data_frame, window=20):
+    df = data_frame.copy()
+    df["H-L"] = df["High"] - df["Low"]
+    df["abs H-pre_close"] = abs(df["High"] - df["Adj Close"].shift(1))
+    df["abs L-pre_close"] = abs(df["Low"] - df["Adj Close"].shift(1))
+    df["TR"] = df[["H-L", "abs H-pre_close", "abs L-pre_close"]].max(axis=1, skipna=False)
+    df["ATR"] = df["TR"].ewm(span=window, min_periods=window).mean()
+    return df["ATR"]
+
 def get_CAGR(DF):
     df = DF.copy()  # 複製數據
     df["cum return"] = (1 + df["ret"]).cumprod()  # 計算累積收益率
@@ -69,15 +63,6 @@ def get_volatility(DF):
     df = DF.copy()  # 複製數據
     vol = df["ret"].std() * np.sqrt(252*75)  # 計算年度波動率
     return vol
-
-def ATR(data_frame, window=20):
-    df = data_frame.copy()
-    df["H-L"] = df["High"] - df["Low"]
-    df["abs H-pre_close"] = abs(df["High"] - df["Adj Close"].shift(1))
-    df["abs L-pre_close"] = abs(df["Low"] - df["Adj Close"].shift(1))
-    df["TR"] = df[["H-L", "abs H-pre_close", "abs L-pre_close"]].max(axis=1, skipna=False)
-    df["ATR"] = df["TR"].ewm(span=window, min_periods=window).mean()
-    return df["ATR"]
 
 def get_sharpe(DF, rf):
     df = DF.copy()
@@ -100,12 +85,11 @@ def get_calmar(DF):
 def get_risk_free_rate():
     # 使用 'TNX' 獲取 10 年期美國國債收益率 (數據來自雅虎財經)
     ticker = "^TNX"
-    data = yf.download(ticker, period="60d", interval="5m")
+    data = yf.download(ticker, period="1d")
     
     # 將收益率從百分比轉換為小數形式
     risk_free_rate = data['Close'].iloc[-1] / 100
     return risk_free_rate
-
 
 stocks = [
     "MMM",  # 3M
@@ -140,6 +124,7 @@ stocks = [
     "TRV",  # Travelers
     "CRM",  # Salesforce.com
 ]
+
 ohlc_data = {}
 
 for ticker in stocks:
@@ -148,63 +133,97 @@ for ticker in stocks:
     ohlc_data[ticker] = temp
 
 stocks = ohlc_data.keys()
-
-ohlc_renko = {}
-ohlc_df = copy.deepcopy(ohlc_data)
+ohlc_df = ohlc_data.copy()
 signal = {}
 ret = {}
-
 for ticker in stocks:
-    renko = renko_DF(ohlc_df[ticker])
-    renko.columns = ["Datetime","open","high","low","close","uptrend","bar_num"]
-    ohlc_renko[ticker] = ohlc_df[ticker].merge(renko.loc[:,["Datetime","bar_num"]],how="outer",on="Datetime")
-    ohlc_renko[ticker]["bar_num"].fillna(method='ffill',inplace=True)
-    ohlc_renko[ticker]["obv"]= get_OBV(ohlc_renko[ticker])
-    ohlc_renko[ticker]["obv_slope"]= get_slope(ohlc_renko[ticker]["obv"], 5)
+    ohlc_df[ticker]["rollin_max"] = ohlc_df[ticker]["High"].rolling(20).max()
+    ohlc_df[ticker]["rollin_min"] = ohlc_df[ticker]["Low"].rolling(20).min()
+    ohlc_df[ticker]["ATR"] = ATR(ohlc_df[ticker])
+    ohlc_df[ticker].dropna(inplace=True)
+    ohlc_df[ticker][["MACD", "Signal"]] = MACD(ohlc_df[ticker])
+    ohlc_df[ticker]["obv"]= get_OBV(ohlc_df[ticker])
+    ohlc_df[ticker]["obv_slope"]= get_slope(ohlc_df[ticker]["obv"], 5)
     signal[ticker] = ""
-    ret[ticker] = [0]
-
+    ret[ticker] = []    
+    
 for ticker in stocks:
-    for i in range(1, len(ohlc_data[ticker])):
+    for i in range(len(ohlc_df[ticker])):
         if signal[ticker] == "":
             ret[ticker].append(0)
-            if ohlc_renko[ticker]["bar_num"][i] >= 2 and ohlc_renko[ticker]["obv_slope"][i] > 30:
+            if ohlc_df[ticker]["High"][i] >= ohlc_df[ticker]["rollin_max"][i] and \
+            ohlc_df[ticker]["MACD"][i] > ohlc_df[ticker]["Signal"][i] and \
+            ohlc_df[ticker]["obv_slope"][i] > 30:
                 signal[ticker] = "buy"
-            elif ohlc_renko[ticker]["bar_num"][i] <= -2 and ohlc_renko[ticker]["obv_slope"][i] <- 30:
+            elif ohlc_df[ticker]["Low"][i] <= ohlc_df[ticker]["rollin_min"][i] and \
+            ohlc_df[ticker]["MACD"][i] < ohlc_df[ticker]["Signal"][i] and\
+            ohlc_df[ticker]["obv_slope"][i] <- 30:
                 signal[ticker] = "sell"
         elif signal[ticker] == "buy":
-            ret[ticker].append((ohlc_renko[ticker]["Adj Close"][i]/ohlc_renko[ticker]["Adj Close"][i-1])-1)
-            if ohlc_renko[ticker]["bar_num"][i] < 2:
+            if ohlc_df[ticker]["Low"][i] < ohlc_df[ticker]["Close"][i-1] - ohlc_df[ticker]["ATR"][i-1] and\
+            ohlc_df[ticker]["MACD"][i] < ohlc_df[ticker]["Signal"][i]:
                 signal[ticker] = ""
-            elif ohlc_renko[ticker]["bar_num"][i] <= -2 and ohlc_renko[ticker]["obv_slope"][i] <- 30:
+                ret[ticker].append((ohlc_df[ticker]["Close"][i-1] - ohlc_df[ticker]["ATR"][i-1])/(ohlc_df[ticker]["Close"][i-1])-1)
+            elif ohlc_df[ticker]["Low"][i] <= ohlc_df[ticker]["rollin_min"][i] and \
+            ohlc_df[ticker]["MACD"][i] < ohlc_df[ticker]["Signal"][i] and\
+            ohlc_df[ticker]["obv_slope"][i] <- 30:
                 signal[ticker] = "sell"
+                ret[ticker].append((ohlc_df[ticker]["Close"][i]/ohlc_df[ticker]["Close"][i-1]) - 1)
+            else:
+                ret[ticker].append((ohlc_df[ticker]["Close"][i]/ohlc_df[ticker]["Close"][i-1]) - 1)
         elif signal[ticker] == "sell":
-            ret[ticker].append(1-(ohlc_renko[ticker]["Adj Close"][i]/ohlc_renko[ticker]["Adj Close"][i-1]))
-            if ohlc_renko[ticker]["bar_num"][i] > -2:
+            if ohlc_df[ticker]["High"][i] > ohlc_df[ticker]["Close"][i-1] + ohlc_df[ticker]["ATR"][i-1] and\
+                ohlc_df[ticker]["MACD"][i] < ohlc_df[ticker]["Signal"][i]:
                 signal[ticker] = ""
-            elif ohlc_renko[ticker]["bar_num"][i] >= 2 and ohlc_renko[ticker]["obv_slope"][i] > 30:
+                ret[ticker].append((ohlc_df[ticker]["Close"][i-1] + ohlc_df[ticker]["ATR"][i-1])/(ohlc_df[ticker]["Close"][i-1])-1)
+            elif ohlc_df[ticker]["High"][i] >= ohlc_df[ticker]["rollin_max"][i] and \
+            ohlc_df[ticker]["MACD"][i] > ohlc_df[ticker]["Signal"][i] and \
+            ohlc_df[ticker]["obv_slope"][i] > 30:
                 signal[ticker] = "buy"
-    ohlc_renko[ticker]["ret"] = np.array(ret[ticker])
+                ret[ticker].append((ohlc_df[ticker]["Close"][i]/ohlc_df[ticker]["Close"][i-1]) - 1)
+            else:
+                ret[ticker].append((ohlc_df[ticker]["Close"][i]/ohlc_df[ticker]["Close"][i-1]) - 1)
 
+    ohlc_df[ticker]["ret"] = np.array(ret[ticker])    
+    
 rf = get_risk_free_rate()  # 設定無風險收益率
 strategy_ret = pd.DataFrame()
 for ticker in stocks:
-    strategy_ret[ticker] = ohlc_renko[ticker]["ret"]
+    strategy_ret[ticker] = ohlc_df[ticker]["ret"]
 strategy_ret["ret"] = strategy_ret.mean(axis=1)
-strategy_ret["Datetime"] = ohlc_renko["AXP"]["Datetime"]
-strategy_ret.set_index(["Datetime"], inplace=True)
 cagr = get_CAGR(strategy_ret)
 sharpe_ratio = get_sharpe(strategy_ret, rf)
 CR = get_calmar(strategy_ret) 
 
 DJI = yf.download("^DJI", period="60d", interval="5m")  # 下載道瓊指數數據
-DJI["ret"] = DJI["Adj Close"].pct_change()
+DJI["ret"] = DJI["Adj Close"].pct_change() 
 
 fig, ax = plt.subplots()  # 創建圖表
 plt.plot((1+strategy_ret["ret"]).cumprod())  # 繪製投資組合的累積收益率
 plt.plot((1+DJI["ret"]).cumprod())  # 繪製道瓊指數的累積收益率
-plt.title("Index Return vs Strategy(Renko&OBV) Return")  # 設置圖表標題
+plt.title("Index Return vs Strategy(Resistance breakout) Return")  # 設置圖表標題
 plt.ylabel("cumulative return")  # 設置Y軸標籤
 plt.xlabel("time")  # 設置X軸標籤
 ax.legend(["Strategy Return","DJI Return"])
-plt.savefig('RenkoOBV.png')    
+plt.savefig('Break_resistance.png')
+
+print(cagr)
+print(sharpe_ratio)
+print(CR)
+print(rf)
+
+print()
+print(get_CAGR(DJI))
+print(get_sharpe(DJI, rf))
+print(get_calmar(DJI))    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
