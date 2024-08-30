@@ -248,4 +248,4 @@ CAGR表現比較:
 
 ![無法載入圖片](image_result/MACD_OBV_Break_resistance.png)
 #### 結論
-考慮多向不一樣的指標
+結合各項指標後的回報穩定上升，能以較低波動度擊敗DJI，成功的在短期下也擊敗了DJI
