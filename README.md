@@ -23,7 +23,8 @@
 
 總結來說，Screen法相能在各方面各種持股量都能勝過指數的表現。
 
-根據TradingView(https://tw.tradingview.com/symbols/NASDAQ-NDX/)，我將NASDAQ100的成分股分成8個不同產業類別，具體如下：
+根據TradingView(https://tw.tradingview.com/symbols/NASDAQ-NDX/)
+我將NASDAQ100的成分股分成8個不同產業類別，具體如下：
 1. 非耐用消費品 :  ['PEP', 'MDLZ', 'KDP', 'MNST', 'KHC', 'CCEP']
 2. 電子科技 :  ['CSCO', 'TXN', 'AMD', 'NVDA', 'ADI', 'ASML', 'INTC', 'NXPI', 'QCOM', 'MU', 'MCHP', 'GFS', 'ON', 'KLAC', 'HON', 'AAPL', 'AVGO', 'ARM', 'TSLA']
 3. 零售業 :  ['ORLY', 'MELI', 'DLTR', 'COST', 'CPRT', 'LULU', 'ROST', 'PDD', 'AMZN']
