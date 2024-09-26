@@ -9,15 +9,15 @@
 引入Screen法，舉體作法如下：
 首先，分析指數中各成分股的每月收益率表現，期初等權重的選擇前一個月表現最好的其中幾支成分股；接著，每月期末，賣出持有各股中表現最差的幾支股票(取持股數的一半)，並將其他原本未納入投資組合中的成分股表現最好的納入新的投資組合，每月持續調整我們的投資組合，直到預設投資期限，此專案中，預設投資期限為五年。Screen法跟NASDAQ 100的比較結果如下圖所示。
 
-![無法載入圖片](image_result/Screen CAGR.png)
+![無法載入圖片](image_result/Screen_CAGR.png)
 
 根據上圖，當持股數超過約15的時候CAGR開始下降，但無論持股數為多少，整體而言，Screen法都能保證擊敗NASDAQ100。(x軸：持股數；y軸：Screen法的CAGR-NASDAQ100的CAGR)
 
-![無法載入圖片](image_result/Screen vol.png)
+![無法載入圖片](image_result/Screen_vol.png)
 
 隨著持股數的上升，Screen法的波動度減少，持股超過約20，Screen法的波動度能夠穩定低於NASDAQ100的波動度。(x軸：持股數；y軸：Screen法的CAGR-NASDAQ100的volatility)
 
-![無法載入圖片](image_result/Screen SR.png)
+![無法載入圖片](image_result/Screen_SR.png)
 
 持股數過少時，Screen法Sharpe ratio的表現是劣於指數的，當持股數增加時，Sharpe ratio在期初上升快速，中後期逐漸平穩。(x軸：持股數；y軸：Screen法的CAGR-NASDAQ100的Sharpe ratio)
 
@@ -56,15 +56,15 @@ NASDAQ100成分股產業比例如下圖所示：
 
 ## 三、	研究結果
 
-![無法載入圖片](image_result/WScreen CAGR.png)
+![無法載入圖片](image_result/WScreen_CAGR.png)
 
 當持股量超過約25時，Weighted Screen法大部分的情況都小幅的勝過Screen法，不過在持股量小於25時，Screen法相較之下在CAGR的表現明顯更好。
 
-![無法載入圖片](image_result/WScreen vol.png)
+![無法載入圖片](image_result/WScreen_vol.png)
 
 波動度的部分，由於有在各產業中充分調配權重，避免了過度投資於某產業的現象，因此，Weighted Screen法從較低的持股量開始就有較低的波動度，隨著持股量的增加，兩方法的波動度逐漸收斂到指數的波動度表現，差異趨近於0。
 
-![無法載入圖片](image_result/WScreen SR.png)
+![無法載入圖片](image_result/WScreen_SR.png)
 
 以Sharpe ratio來看兩方法的差異，關鍵持股數落在約25的地方。當持股數小於25時，Screen法勝過Weighted Screen；當持股數大於25時，Weighted Screen勝過Screen法。
 
