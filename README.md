@@ -1,7 +1,7 @@
 # __Outperformce DJI, Trading with Python__
 ## 一、	研究簡介
 
-利用並改良Screen法構建長期投資策略，並透過python編寫進出場時機、買賣條件、其他限制條件以及Screen法在程式碼中的實現，以量化分析的方式進行研究，除了能處理大量的數據及計算以外，也能避免人類的非理性所導致的主觀差異。此專案以穩定擊敗市場上的指數並改良screen法為目的。最後會進行歷史資料的回測，並且透過Profit and loss,  Volatility, Sharpe Ratio比較screen及其改良方法以及指數三者的表現。
+    利用並改良Screen法構建長期投資策略，並透過python編寫進出場時機、買賣條件、其他限制條件以及Screen法在程式碼中的實現，以量化分析的方式進行研究，除了能處理大量的數據及計算以外，也能避免人類的非理性所導致的主觀差異。此專案以穩定擊敗市場上的指數並改良screen法為目的。最後會進行歷史資料的回測，並且透過Profit and loss,  Volatility, Sharpe Ratio比較screen及其改良方法以及指數三者的表現。
 
 ## 交易策略說明
 ### 1. Portfolios rebalancing
